@@ -202,7 +202,8 @@ model_lw = Lowess(kernel= Gaussian,tau=0.14)
 ```c
 model_lw = Lowess(kernel= Tricubic,tau=0.14)
 ```
-<img width="787" alt="Screenshot 2024-02-25 at 9 54 56 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/1c99ea2c-fed9-4b0c-ba52-9307498917a4">
+<img width="802" alt="Screenshot 2024-02-25 at 10 11 35 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/beb2ec3c-bab9-4d18-a2c5-89a8aa15a429">
+
 
 #### Epanechnikov Kernel
 ```c
