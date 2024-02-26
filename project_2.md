@@ -112,3 +112,26 @@ W = weight_function(scale.fit_transform(x),scale.fit_transform(x),kern=Tricubic,
 W
 ```
 <img width="624" alt="Screenshot 2024-02-25 at 7 34 06 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/4c81940c-23c0-4c95-9928-3f6f25e47e16">
+
+Let's try creating and running this model. 
+
+```c
+model = Lowess(kernel=Epanechnikov,tau=0.05)
+xscaled = scale.fit_transform(x)
+model.fit(xscaled,y)
+yhat = model.predict(xscaled)
+yhat
+```
+<img width="192" alt="Screenshot 2024-02-25 at 7 44 56 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/1703d1a8-228b-4f80-90cd-8f7f9ebf8797">
+
+```c
+mse(yhat, y)
+```
+<img width="158" alt="Screenshot 2024-02-25 at 7 45 23 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/a2c46739-70fd-4470-a025-80263cc54cdd">
+
+
+
+
+
+
+
