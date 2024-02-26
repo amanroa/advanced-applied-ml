@@ -138,7 +138,8 @@ model.fit(xscaled,y)
 yhat = model.predict(xscaled)
 mse(yhat,y)
 ```
-<img width="172" alt="Screenshot 2024-02-25 at 7 51 20 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/d4f05c22-dc30-443a-a82a-ba8be7a1a18e">
+<img width="798" alt="Screenshot 2024-02-25 at 10 03 31 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/81572b33-6a07-4d37-8aba-7adc8d3800f6">
+
 
 ```c
 model = Lowess(kernel=Quartic,tau=0.05)
@@ -235,6 +236,7 @@ print('The Cross-validated Mean Squared Error for Locally Weighted Regression is
 ```
 <img width="800" alt="Screenshot 2024-02-25 at 9 58 10 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/024ab7bd-a781-46ee-9a13-40b76cce61e4">
 
+
 #### Gaussian Kernel
 ```c
 model_lw = Lowess(kernel= Gaussian,tau=0.14)
@@ -254,6 +256,53 @@ model_lw = Lowess(kernel= Tricubic,tau=0.14)
 model_lw = Lowess(kernel= Epanechnikov,tau=0.14)
 ```
 <img width="809" alt="Screenshot 2024-02-25 at 9 59 15 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/fe9a91f4-bbe7-4cba-bfc8-2c7ee1f58546">
+
+### Quartile Scaler
+
+#### Quartic Kernel
+
+```c
+scale = QuartileTransformer()
+mse_lwr = []
+mse_rf = []
+kf = KFold(n_splits=10,shuffle=True,random_state=1234)
+model_lw = Lowess(kernel= Quartic,tau=0.14)
+
+for idxtrain, idxtest in kf.split(x):
+  xtrain = x[idxtrain]
+  ytrain = y[idxtrain]
+  ytest = y[idxtest]
+  xtest = x[idxtest]
+  xtrain = scale.fit_transform(xtrain)
+  xtest = scale.transform(xtest)
+
+  model_lw.fit(xtrain,ytrain)
+  yhat_lw = model_lw.predict(xtest)
+
+  mse_lwr.append(mse(ytest,yhat_lw))
+print('The Cross-validated Mean Squared Error for Locally Weighted Regression is : '+str(np.mean(mse_lwr)))
+```
+<img width="809" alt="Screenshot 2024-02-25 at 10 05 38 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/b83da444-d2ef-42f9-ba35-0cd6f70c6fa1">
+
+#### Gaussian Kernel
+```c
+model_lw = Lowess(kernel= Gaussian,tau=0.14)
+```
+<img width="798" alt="Screenshot 2024-02-25 at 10 07 01 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/6c5fe9fa-45d7-408e-b7a6-b3377db1bf15">
+
+#### Tricubic Kernel
+```c
+model_lw = Lowess(kernel= Tricubic,tau=0.14)
+```
+<img width="810" alt="Screenshot 2024-02-25 at 10 07 23 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/65b6f379-a9bd-4c2d-8329-4e448d4d8eea">
+
+#### Epanechnikov Kernel
+```c
+model_lw = Lowess(kernel= Epanechnikov,tau=0.14)
+```
+<img width="796" alt="Screenshot 2024-02-25 at 10 07 46 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/646845e1-a909-4511-993a-67b6315edb85">
+
+
 
 
 
