@@ -102,7 +102,7 @@ class Lowess:
         raise ValueError("Scaler has not been fitted yet. Please call 'fit' with the appropriate values.")
 ```
 
-I also defined a scaler, which was the MinMaxScaler (chosen randomly), and a weight function. 
+I also defined a scaler, which was the MinMaxScaler (chosen randomly), and a weight function. This is an example of what the x data would look like after running it through the weight function using a Tricubic kernel. 
 
 ```
 scale = MinMaxScaler()
