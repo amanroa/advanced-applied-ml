@@ -44,3 +44,71 @@ x = data.loc[:,'cement':'age'].values
 y = data['strength'].values
 xtrain, xtest, ytrain, ytest = tts(x,y,test_size=0.3,shuffle=True,random_state=123)
 ```
+
+There are also four kernels that I needed to define:
+
+```
+# Gaussian Kernel
+def Gaussian(x):
+  return np.where(np.abs(x)>4,0,1/(np.sqrt(2*np.pi))*np.exp(-1/2*x**2))
+# this is the correct vectorized version
+def Tricubic(x):
+  return np.where(np.abs(x)>1,0,(1-np.abs(x)**3)**3)
+# Epanechnikov Kernel
+def Epanechnikov(x):
+  return np.where(np.abs(x)>1,0,3/4*(1-np.abs(x)**2))
+# Quartic Kernel
+def Quartic(x):
+  return np.where(np.abs(x)>1,0,15/16*(1-np.abs(x)**2)**2)
+```
+
+## Part 1: Lowess/Gradient Boosting
+
+I created a Lowess class containing the methods `fit`, `predict`, and `is_fitted`.
+
+```
+class Lowess:
+    def __init__(self, kernel = Gaussian, tau=0.05):
+        self.kernel = kernel
+        self.tau = tau
+
+    def fit(self, x, y):
+        kernel = self.kernel
+        tau = self.tau
+        self.xtrain_ = x
+        self.yhat_ = y
+
+    def predict(self, x_new):
+        self.is_fitted()
+        x = self.xtrain_
+        y = self.yhat_
+        lm = linear_model.Ridge(alpha=0.001)
+        w = weight_function(x,x_new,self.kernel,self.tau)
+
+        if np.isscalar(x_new):
+          lm.fit(np.diag(w)@(x.reshape(-1,1)),np.diag(w)@(y.reshape(-1,1)))
+          yest = lm.predict([[x_new]])[0][0]
+        else:
+
+          n = len(x_new)
+          yest_test = []
+          for i in range(n):
+            lm.fit(np.diag(w[:,i])@x,np.diag(w[:,i])@y)
+            yest_test.append(lm.predict(x_new[i].reshape(1,-1)))
+        return np.array(yest_test).reshape(-1,1)
+
+    def is_fitted(self):
+      if self.tau is None or self.kernel is None:
+        raise ValueError("Scaler has not been fitted yet. Please call 'fit' with the appropriate values.")
+```
+
+I also defined a scaler, which was the MinMaxScaler (chosen randomly), and a weight function. 
+
+```
+scale = MinMaxScaler()
+def weight_function(u,v,kern=Gaussian,tau=0.5):
+    return kern(cdist(u, v, metric='euclidean')/(2*tau))
+W = weight_function(scale.fit_transform(x),scale.fit_transform(x),kern=Tricubic,tau=0.3)
+W
+```
+<img width="624" alt="Screenshot 2024-02-25 at 7 34 06 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/4c81940c-23c0-4c95-9928-3f6f25e47e16">
