@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Project-2"
-permalink: /project_2.md
+permalink: /project_2/
 ---
 
 # Project 2 - Aashni Manroa
