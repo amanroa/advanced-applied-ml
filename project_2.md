@@ -303,6 +303,15 @@ model_lw = Lowess(kernel= Epanechnikov,tau=0.14)
 ```
 <img width="796" alt="Screenshot 2024-02-25 at 10 07 46 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/646845e1-a909-4511-993a-67b6315edb85">
 
+The results of all of this testing: The Quartile Scaler with the Gaussian kernel was the best performing (had the lowest MSE) with a cross validated MSE of 21.99. The overall worst performing Scaler was the Standard Scaler. Interestingly, the Quartile Scaler did not perform well, with the other kernels returning MSEs > 100 except for the Gaussian kernel. The MinMax Scaler's MSE was consistently in the 46 - 83 range. 
+
+
+
+
+
+
+
+
 
 
 
