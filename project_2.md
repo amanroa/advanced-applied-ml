@@ -361,3 +361,29 @@ one_in_many.distances
 <img width="595" alt="Screenshot 2024-02-25 at 11 28 36 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/4e0b0ceb-5183-49a0-a526-52b0e97d521f">
 
 If I were to create a class for this, it would look something like this. 
+
+```c
+class Distances:
+   
+  def __init__(self, vector1, vector2):
+    self.vector1 = vector1
+    self.vector2 = vector2
+  
+  def calc_dist(self):
+    one_in_many: Matches = search(self.vector1, self.vector2, 50, MetricKind.L2sq, exact=True)
+    self.one_in_many = one_in_many
+    return one_in_many
+
+  def show_list(self):
+    print(self.one_in_many.to_list())
+```
+Here is an example of how to implement my code, as well as the output.
+
+```c
+d = Distances(xtrain, xtest)
+output = d.calc_dist()
+output.distances
+```
+<img width="588" alt="Screenshot 2024-02-25 at 11 38 20 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/4fc9ff50-7de3-414d-b679-82bffa05277d">
+
+This is how I was able to create a class that uses USearch to calculate KNN!
