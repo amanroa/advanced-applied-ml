@@ -102,16 +102,16 @@ class Lowess:
         raise ValueError("Scaler has not been fitted yet. Please call 'fit' with the appropriate values.")
 ```
 
-I also defined a scaler, which was the MinMaxScaler (chosen randomly), and a weight function. This is an example of what the x data would look like after running it through the weight function using a Tricubic kernel. 
+I also defined a scaler, which was the StandardScaler, and a weight function. This is an example of what the x data would look like after running it through the weight function using a Tricubic kernel. 
 
 ```c
-scale = MinMaxScaler()
+scale = StandardScaler()
 def weight_function(u,v,kern=Gaussian,tau=0.5):
     return kern(cdist(u, v, metric='euclidean')/(2*tau))
 W = weight_function(scale.fit_transform(x),scale.fit_transform(x),kern=Tricubic,tau=0.3)
 W
 ```
-<img width="624" alt="Screenshot 2024-02-25 at 7 34 06 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/4c81940c-23c0-4c95-9928-3f6f25e47e16">
+<img width="628" alt="Screenshot 2024-02-25 at 7 49 44 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/0566f1ce-dfed-44d4-bf14-5b17c4a9f6f4">
 
 Let's try creating and running this model. 
 
@@ -122,16 +122,41 @@ model.fit(xscaled,y)
 yhat = model.predict(xscaled)
 yhat
 ```
-<img width="192" alt="Screenshot 2024-02-25 at 7 44 56 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/1703d1a8-228b-4f80-90cd-8f7f9ebf8797">
+<img width="198" alt="Screenshot 2024-02-25 at 7 49 59 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/207ae41c-815b-44eb-a47d-2624d343ca96">
 
 ```c
 mse(yhat, y)
 ```
-<img width="158" alt="Screenshot 2024-02-25 at 7 45 23 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/a2c46739-70fd-4470-a025-80263cc54cdd">
+<img width="163" alt="Screenshot 2024-02-25 at 7 50 15 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/1bb6de6c-af5d-491e-9cd0-dd6982898893">
 
+That's a pretty good MSE for this model. Let's try with the other kernels and see what we get before we move into 10-fold Validation. 
 
+```c
+model = Lowess(kernel=Tricubic,tau=0.05)
+xscaled = scale.fit_transform(x)
+model.fit(xscaled,y)
+yhat = model.predict(xscaled)
+mse(yhat,y)
+```
+<img width="172" alt="Screenshot 2024-02-25 at 7 51 20 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/d4f05c22-dc30-443a-a82a-ba8be7a1a18e">
 
+```c
+model = Lowess(kernel=Quartic,tau=0.05)
+xscaled = scale.fit_transform(x)
+model.fit(xscaled,y)
+yhat = model.predict(xscaled)
+mse(yhat,y)
+```
+<img width="167" alt="Screenshot 2024-02-25 at 7 52 22 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/80d59737-95e5-480c-a6fc-77a723e1b503">
 
+```c
+model = Lowess(kernel=Gaussian,tau=0.05)
+xscaled = scale.fit_transform(x)
+model.fit(xscaled,y)
+yhat = model.predict(xscaled)
+mse(yhat,y)
+```
+<img width="153" alt="Screenshot 2024-02-25 at 7 52 36 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/b5f102bc-dea2-4679-86ee-93d9bcb67129">
 
 
 
