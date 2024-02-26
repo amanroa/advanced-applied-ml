@@ -327,12 +327,37 @@ mse(yhat,y)
 ```
 <img width="165" alt="Screenshot 2024-02-25 at 10 27 14 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/c6022723-7ec8-40e6-b5ea-84b01239534b">
 
-By tuning the hyperparameters of the scaler and the kernel, I was able to get an MSE that was much smaller than the one given by XGBoost. However, if I wanted to get the MSE even lower, I could decrease the tau value. For example, if I made `tau = 0.01`, the MSE value will decrease to 1.2911046017204297. 
+By tuning the hyperparameters of the scaler and the kernel, I was able to get an MSE that was much smaller than the one given by XGBoost. However, if I wanted to get the MSE even lower, I could decrease the tau value. For example, if I changed `tau = 0.01`, the MSE value decreased to 1.2911046017204297. 
 
 ## USearch 
 
+For this section, I needed to create a KNN for each observation in the test set by measuring distances with the observations in the train set. I wasn't too sure how to do this, so I tried a couple different ways. But first, I had to import the USearch library.
 
+```c
+!pip install usearch
+from usearch.index import search, MetricKind, Matches, BatchMatches
+```
 
+And just to remind us, this is how I split the test and train data:
 
+```c
+xtrain, xtest, ytrain, ytest = tts(x,y,test_size=0.3,shuffle=True,random_state=123)
+```
 
+So I first tried creating a Matches object with the xtrain and xtest data, and searching for the distances between them. 
 
+```c
+one_in_many: Matches = search(xtrain, xtest, 50, MetricKind.L2sq, exact=True)
+one_in_many.to_list()
+```
+<img width="143" alt="Screenshot 2024-02-25 at 11 23 28 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/d22c21a8-9091-42d0-a996-c2110a2aad77">
+
+Interestingly, I also found that using BatchMatches produces the same output. So, I printed out the distances found by the search function:
+
+```c
+one_in_many.distances
+```
+
+<img width="595" alt="Screenshot 2024-02-25 at 11 28 36 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/4e0b0ceb-5183-49a0-a526-52b0e97d521f">
+
+If I were to create a class for this, it would look something like this. 
