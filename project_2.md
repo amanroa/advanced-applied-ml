@@ -258,12 +258,12 @@ model_lw = Lowess(kernel= Epanechnikov,tau=0.14)
 ```
 <img width="809" alt="Screenshot 2024-02-25 at 9 59 15 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/fe9a91f4-bbe7-4cba-bfc8-2c7ee1f58546">
 
-### Quartile Scaler
+### Quantile Scaler
 
 #### Quartic Kernel
 
 ```c
-scale = QuartileTransformer()
+scale = QuantileTransformer()
 mse_lwr = []
 mse_rf = []
 kf = KFold(n_splits=10,shuffle=True,random_state=1234)
@@ -303,11 +303,31 @@ model_lw = Lowess(kernel= Epanechnikov,tau=0.14)
 ```
 <img width="796" alt="Screenshot 2024-02-25 at 10 07 46 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/646845e1-a909-4511-993a-67b6315edb85">
 
-The results of all of this testing: The Quartile Scaler with the Gaussian kernel was the best performing (had the lowest MSE) with a cross validated MSE of 21.99. The overall worst performing Scaler was the Standard Scaler. Interestingly, the Quartile Scaler did not perform well, with the other kernels returning MSEs > 100 except for the Gaussian kernel. The MinMax Scaler's MSE was consistently in the 46 - 83 range. 
+The results of all of this testing: The Quantile Scaler with the Gaussian kernel was the best performing (had the lowest MSE) with a cross validated MSE of 21.99. The overall worst performing Scaler was the Standard Scaler. Interestingly, the Quartile Scaler did not perform well, with the other kernels returning MSEs > 100 except for the Gaussian kernel. The MinMax Scaler's MSE was consistently in the 46 - 83 range. 
 
+## XGBoost vs my model
 
+In this section, I will be comparing my best model to the XGBoost model. In order to do this, I need to import the xgboost library and create a model. I will use my best model (Quantile Scaler with Gaussian kernel), and compare the two. 
 
+```c
+import xgboost
+model_xgboost = xgboost.XGBRFRegressor(n_estimators=200,max_depth=7)
+model_xgboost.fit(xtrain,ytrain)
+mse(ytest,model_xgboost.predict(xtest))
+```
+<img width="167" alt="Screenshot 2024-02-25 at 10 25 47 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/8c2ee91b-7b78-4d08-8779-b1f31f44fe87">
 
+```c
+scale = QuantileTransformer()
+model = Lowess(kernel=Gaussian,tau=0.05)
+xscaled = scale.fit_transform(x)
+model.fit(xscaled,y)
+yhat = model.predict(xscaled)
+mse(yhat,y)
+```
+<img width="165" alt="Screenshot 2024-02-25 at 10 27 14 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/c6022723-7ec8-40e6-b5ea-84b01239534b">
+
+By tuning the hyperparameters of the scaler and the kernel, I was able to get an MSE that was much smaller than the one given by XGBoost. However, if I wanted to get the MSE even lower, I could decrease the tau value. For example, if I made `tau = 0.01`, the MSE value will decrease to 1.2911046017204297. 
 
 
 
