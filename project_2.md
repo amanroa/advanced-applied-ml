@@ -8,7 +8,7 @@ permalink: /project_2/
 
 In this project, I will be experimenting with Gradient Boosting. I will be using the concrete csv that we used in class. First, we have to import various packages and load the data. 
 
-```
+```c
 %matplotlib inline
 %config InlineBackend.figure_format = 'retina'
 import matplotlib.pyplot as plt
@@ -31,7 +31,7 @@ from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.model_selection import train_test_split as tts, KFold, GridSearchCV
 ```
 
-```
+```c
 data = pd.read_csv('/concrete.csv')
 data
 ```
@@ -39,7 +39,7 @@ data
 
 This is what my data looks like. I decided to have the x variables be age and cement, and the y variable be age. I also split them into training and testing sets, with 70% for training and 30% for testing.
 
-```
+```c
 x = data.loc[:,'cement':'age'].values
 y = data['strength'].values
 xtrain, xtest, ytrain, ytest = tts(x,y,test_size=0.3,shuffle=True,random_state=123)
@@ -47,7 +47,7 @@ xtrain, xtest, ytrain, ytest = tts(x,y,test_size=0.3,shuffle=True,random_state=1
 
 There are also four kernels that I needed to define:
 
-```
+```c
 # Gaussian Kernel
 def Gaussian(x):
   return np.where(np.abs(x)>4,0,1/(np.sqrt(2*np.pi))*np.exp(-1/2*x**2))
@@ -66,7 +66,7 @@ def Quartic(x):
 
 I created a Lowess class containing the methods `fit`, `predict`, and `is_fitted`.
 
-```
+```c
 class Lowess:
     def __init__(self, kernel = Gaussian, tau=0.05):
         self.kernel = kernel
@@ -104,7 +104,7 @@ class Lowess:
 
 I also defined a scaler, which was the MinMaxScaler (chosen randomly), and a weight function. This is an example of what the x data would look like after running it through the weight function using a Tricubic kernel. 
 
-```
+```c
 scale = MinMaxScaler()
 def weight_function(u,v,kern=Gaussian,tau=0.5):
     return kern(cdist(u, v, metric='euclidean')/(2*tau))
