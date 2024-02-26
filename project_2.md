@@ -158,5 +158,5 @@ mse(yhat,y)
 ```
 <img width="153" alt="Screenshot 2024-02-25 at 7 52 36 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/b5f102bc-dea2-4679-86ee-93d9bcb67129">
 
-
+It seems like the Quartic kernel is the best performing kernel (has the lowest MSE). 
 
