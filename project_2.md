@@ -158,13 +158,15 @@ mse(yhat,y)
 ```
 <img width="153" alt="Screenshot 2024-02-25 at 7 52 36 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/b5f102bc-dea2-4679-86ee-93d9bcb67129">
 
-It seems like the Quartic kernel is the best performing kernel (has the lowest MSE). Because of this, I will use the Quartic kernel in the rest of this question. 
+It seems like the Quartic kernel is the best performing kernel (has the lowest MSE). Next, I will move on to 10-Fold validation.
 
 ## 10-Fold Validation 
 
-Next, using the Quartic kernel, I tried to do 10 fold validation using three different scalers. 
+I tried to do 10 fold validation using three different scalers. Within each scaler, I tested all of the kernels. I did this in order to find the perfect combination of scaler and kernel that yields the lowest Cross validated MSE. To reduce redundancy, I will not paste my full code for most of the kernels, as it is the same each time - the only thing changing is the kernel name.
 
 ### MinMax Scaler
+
+#### Quartic Kernel 
 
 ```c
 scale = MinMaxScaler()
@@ -189,12 +191,69 @@ print('The Cross-validated Mean Squared Error for Locally Weighted Regression is
 ```
 <img width="795" alt="Screenshot 2024-02-25 at 9 40 20 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/bb2321e6-a16e-4f54-97ec-c680fcd752d2">
 
+#### Gaussian Kernel
+```c
+model_lw = Lowess(kernel= Gaussian,tau=0.14)
+```
+<img width="807" alt="Screenshot 2024-02-25 at 9 54 32 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/3873081a-9b2a-44fb-b45f-ba48d9161d92">
+
+#### Tricubic Kernel
+```c
+model_lw = Lowess(kernel= Tricubic,tau=0.14)
+```
+<img width="787" alt="Screenshot 2024-02-25 at 9 54 56 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/1c99ea2c-fed9-4b0c-ba52-9307498917a4">
+
+#### Epanechnikov Kernel
+```c
+model_lw = Lowess(kernel= Epanechnikov,tau=0.14)
+```
+<img width="792" alt="Screenshot 2024-02-25 at 9 57 13 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/7ef7ba6a-d38e-4d26-a24b-0d6c4b6c69c7">
+
 ### Standard Scaler
 
+#### Quartic Kernel 
+```c
+scale = StandardScaler()
+mse_lwr = []
+mse_rf = []
+kf = KFold(n_splits=10,shuffle=True,random_state=1234)
+model_lw = Lowess(kernel= Quartic,tau=0.14)
+
+for idxtrain, idxtest in kf.split(x):
+  xtrain = x[idxtrain]
+  ytrain = y[idxtrain]
+  ytest = y[idxtest]
+  xtest = x[idxtest]
+  xtrain = scale.fit_transform(xtrain)
+  xtest = scale.transform(xtest)
+
+  model_lw.fit(xtrain,ytrain)
+  yhat_lw = model_lw.predict(xtest)
+
+  mse_lwr.append(mse(ytest,yhat_lw))
+print('The Cross-validated Mean Squared Error for Locally Weighted Regression is : '+str(np.mean(mse_lwr)))
+```
+<img width="800" alt="Screenshot 2024-02-25 at 9 58 10 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/024ab7bd-a781-46ee-9a13-40b76cce61e4">
+
+#### Gaussian Kernel
+```c
+model_lw = Lowess(kernel= Gaussian,tau=0.14)
+```
+<img width="824" alt="Screenshot 2024-02-25 at 9 58 49 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/9fe4e03a-0171-4137-b8a4-081fd828cfee">
 
 
+#### Tricubic Kernel
+```c
+model_lw = Lowess(kernel= Tricubic,tau=0.14)
+```
+<img width="797" alt="Screenshot 2024-02-25 at 9 59 00 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/5c8c0182-f441-4c89-afdb-cf92d950436c">
 
 
+#### Epanechnikov Kernel
+```c
+model_lw = Lowess(kernel= Epanechnikov,tau=0.14)
+```
+<img width="809" alt="Screenshot 2024-02-25 at 9 59 15 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/fe9a91f4-bbe7-4cba-bfc8-2c7ee1f58546">
 
 
 
