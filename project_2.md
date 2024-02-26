@@ -1,6 +1,6 @@
 # Project 2 - Aashni Manroa
 
-In this project, I will be experimenting with Gradient Boosting. I will be using the concrete csv that we used in class. First, we have to import various packages. 
+In this project, I will be experimenting with Gradient Boosting. I will be using the concrete csv that we used in class. First, we have to import various packages and load the data. 
 
 ```
 %matplotlib inline
@@ -24,3 +24,9 @@ from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 from sklearn.model_selection import train_test_split as tts, KFold, GridSearchCV
 ```
+
+```
+data = pd.read_csv('/concrete.csv')
+data
+```
+<img width="676" alt="Screenshot 2024-02-25 at 7 01 39 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/10af192b-0923-4982-9d22-9dae9305a94c">
