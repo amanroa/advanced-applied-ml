@@ -1,3 +1,9 @@
+---
+layout: page
+title: "Project-2"
+permalink: /project_2.md
+---
+
 # Project 2 - Aashni Manroa
 
 In this project, I will be experimenting with Gradient Boosting. I will be using the concrete csv that we used in class. First, we have to import various packages and load the data. 
