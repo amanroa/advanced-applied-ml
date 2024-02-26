@@ -329,7 +329,7 @@ mse(yhat,y)
 
 By tuning the hyperparameters of the scaler and the kernel, I was able to get an MSE that was much smaller than the one given by XGBoost. However, if I wanted to get the MSE even lower, I could decrease the tau value. For example, if I made `tau = 0.01`, the MSE value will decrease to 1.2911046017204297. 
 
-
+## USearch 
 
 
 
