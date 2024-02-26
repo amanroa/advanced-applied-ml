@@ -387,3 +387,19 @@ output.distances
 <img width="588" alt="Screenshot 2024-02-25 at 11 38 20 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/4fc9ff50-7de3-414d-b679-82bffa05277d">
 
 This is how I was able to create a class that uses USearch to calculate KNN!
+
+## Summary
+
+In summary, I created a Lowess class to do Gradient Boosting. Using this class and 10-fold validation, I found that the combination of Scaler and kernel that works the best is the Quantile Scaler (Transformer) and the Gaussian Kernel. This gave me a MSE of 21.99144628460333. When comparing this model to XGBoost, I reduced the tau value to 0.01. Because of this, I was able to get an MSE of 1.2911046017204297. This is smaller than XGBoost's MSE of 27.443587005918328. Finally, I used USearch to create a class that performs KNN on the training and testing sets, thereby predicting the output of the test set.
+
+
+
+
+
+
+
+
+
+
+
+
