@@ -62,7 +62,7 @@ def Quartic(x):
   return np.where(np.abs(x)>1,0,15/16*(1-np.abs(x)**2)**2)
 ```
 
-## Part 1: Lowess/Gradient Boosting
+## Lowess/Gradient Boosting
 
 I created a Lowess class containing the methods `fit`, `predict`, and `is_fitted`.
 
@@ -158,5 +158,43 @@ mse(yhat,y)
 ```
 <img width="153" alt="Screenshot 2024-02-25 at 7 52 36 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/b5f102bc-dea2-4679-86ee-93d9bcb67129">
 
-It seems like the Quartic kernel is the best performing kernel (has the lowest MSE). 
+It seems like the Quartic kernel is the best performing kernel (has the lowest MSE). Because of this, I will use the Quartic kernel in the rest of this question. 
+
+## 10-Fold Validation 
+
+Next, using the Quartic kernel, I tried to do 10 fold validation using three different scalers. 
+
+### MinMax Scaler
+
+```c
+scale = MinMaxScaler()
+mse_lwr = []
+mse_rf = []
+kf = KFold(n_splits=10,shuffle=True,random_state=1234)
+model_lw = Lowess(kernel= Quartic,tau=0.14)
+
+for idxtrain, idxtest in kf.split(x):
+  xtrain = x[idxtrain]
+  ytrain = y[idxtrain]
+  ytest = y[idxtest]
+  xtest = x[idxtest]
+  xtrain = scale.fit_transform(xtrain)
+  xtest = scale.transform(xtest)
+
+  model_lw.fit(xtrain,ytrain)
+  yhat_lw = model_lw.predict(xtest)
+
+  mse_lwr.append(mse(ytest,yhat_lw))
+print('The Cross-validated Mean Squared Error for Locally Weighted Regression is : '+str(np.mean(mse_lwr)))
+```
+<img width="795" alt="Screenshot 2024-02-25 at 9 40 20 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/bb2321e6-a16e-4f54-97ec-c680fcd752d2">
+
+### Standard Scaler
+
+
+
+
+
+
+
 
