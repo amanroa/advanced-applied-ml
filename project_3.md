@@ -256,18 +256,18 @@ This MSE was slightly less than the SqrtLasso MSE, but not by a lot. Once again,
 
 ```c
 betastar_torch = torch.from_numpy(betastar).to(dtype = torch.float64)
-sqrt_betastar = elastic_model.get_coefficients().detach() 
-print("Sqrt Lasso betastar:", sqrt_betastar)
+elastic_betastar = elastic_model.get_coefficients().detach() 
+print("elastic betastar:", elastic_betastar)
 ```
-<img width="804" alt="Screenshot 2024-03-09 at 12 58 21 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/0c137930-abd2-4366-95ca-60d42aa27b20">
+<img width="772" alt="Screenshot 2024-03-09 at 1 14 23 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/08d95372-c32b-44af-9c9d-ce2281584c68">
 
 Now let's look at the graph.
 
-<img width="992" alt="Screenshot 2024-03-09 at 12 59 07 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/f3c55eec-77c7-4f13-9f4e-12c7c4ea44f1">
+<img width="995" alt="Screenshot 2024-03-09 at 1 14 50 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/c08428c2-cd32-4d78-b57d-5594f4277c13">
 
 Interestingly, this model was also not able to get any betastar values that were negative. However, it performed slightly better in being more specific with it's predicted values. For example, indices 8 and 9 in the Sqrt Lasso model were very similar, despite their huge difference. But in this model, index 9 is higher than index 8. Also, the indices on the right side of the chart were closer to 0 (their original value) than their counterparts in the SqrtLasso model. 
 
-
+### SCAD
 
 
 
