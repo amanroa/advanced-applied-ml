@@ -269,6 +269,59 @@ Interestingly, this model was also not able to get any betastar values that were
 
 ### SCAD
 
+Finally, I tried this for SCAD. I repeated the same steps as the last two models, except I manually fitted the data like I did earlier. 
+
+```c
+scad_model = LinearSCAD(input_dim=20)
+scad_model.to(dtype = torch.float64)
+
+optimizer = optim.Adam(scad_model.parameters(), lr=0.01)
+
+num_epochs = 100
+
+for e in range(num_epochs):
+  optimizer.zero_grad()
+  loss = scad_model.scad_loss(xtrain_torch, ytrain_torch)
+  loss.backward()
+  optimizer.step()
+
+  if e % 10 == 0:
+    print("Loss at", e, "epoch:", loss.item())
+```
+Next, I predicted the y values and got the MSE value as well. This one was higher than both ElasticNet and SqrtLasso.
+
+```c
+y_pred = scad_model(xtest_torch)
+mse_loss = nn.MSELoss()(y_pred, ytest_torch)
+print("Test MSE:", mse_loss.item())
+```
+<img width="255" alt="Screenshot 2024-03-09 at 1 41 46 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/064cad54-5edb-4491-8177-d9de5eca6086">
+
+```c
+betastar_torch = torch.from_numpy(betastar).to(dtype = torch.float64)
+scad_betastar = scad_model.linear.weight.detach().numpy()
+print("SCAD betastar:", scad_betastar)
+```
+<img width="752" alt="Screenshot 2024-03-09 at 1 42 27 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/d233f7fc-c78d-4e5a-9e53-a5b34acfd739">
+
+And here are the predicted betastar values and their corresponding graph!
+
+<img width="993" alt="Screenshot 2024-03-09 at 1 42 58 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/57caddd2-6838-4fbe-8a4a-b40bd3d09345">
+
+This graph is not as great as the other two models. There isn't a lot of variation between the predicted coefficients, and it is also unable to predict any negative values.
+
+## Conclusion
+
+In conclusion, the SCAD class that I wrote did not do very well on both the concrete dataset and the randomized dataset. I think that maybe it could be because I didn't know how to integrate the scad_derivative function, or that I messed something up while trying to code this class. Mostly, I am unsure as to why this didn't work out the way that I envisioned. 
+
+Out of the three models with the randomized data, I believe that ElasticNet performed the best at predicting betastar values, as it has the lowest MSE and the most accurate graph (although it wasn't exact or perfect). In the future, I would like to spend more time fixing the errors I made with my SCAD class and learning more about it to make sure that it works well. 
+
+
+
+
+
+
+
 
 
 
