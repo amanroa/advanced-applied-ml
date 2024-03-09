@@ -231,10 +231,13 @@ betastar_torch = torch.from_numpy(betastar).to(dtype = torch.float64)
 sqrt_betastar = sqrt_model.get_coefficients().detach() 
 print("Sqrt Lasso betastar:", sqrt_betastar)
 ```
+<img width="801" alt="Screenshot 2024-03-09 at 12 47 30 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/24d91900-bbce-42e2-9690-2d44804a3fc4">
 
+I decided to create a graph of actual betastar values as compared to the model's betastar values.
 
+<img width="997" alt="Screenshot 2024-03-09 at 12 48 15 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/ce8be07e-a825-42bb-9493-46714a666353">
 
-
+This graph shows that SqrtLasso models have the trend of betastar values down well but it isn't exact. For example, the latter indicies don't have any betastar values, and the model predicted values that were close to 0 for those. And in the areas where the betastar values were higher, the model predicted higher values there too. But the values that it predicted for those coefficients that were >0 were not close to the actual values.
 
 
 
