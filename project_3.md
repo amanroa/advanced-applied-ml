@@ -156,3 +156,18 @@ The coefficients themselves were: [[ 0.07156901  0.01445613 -0.00761952  0.22866
 
 <img width="565" alt="Screenshot 2024-03-08 at 10 40 14 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/03b21c55-a7d8-4c12-aae8-8b622e3cdd4e">
 
+Interestingly, when I modified my model to include only those features, my $R^2$ became negative, with it being -0.9558600377736646 after adding all of the features whos absolute values were greater than 0.02 (all of the features mentioned above). I'm not too sure as to why this happened - maybe my model was overfitted or underfitted. 
+
+This is how I created my SCAD model. Now, I will compare it to the ElasticNet and SqrtLasso models. 
+
+## Part 2: ElasticNet, SqrtLasso and SCAD Comparison
+
+The ElasticNet and SqrtLasso classes that I used were the same classes defined in the notebook titled 'Variable_Selection_and_Regularization_Introducation'. For redundancy and to make this notebook easier to read, I will not paste them here.
+
+
+
+
+
+
+
+
