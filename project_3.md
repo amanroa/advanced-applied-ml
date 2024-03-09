@@ -107,3 +107,30 @@ xtest_torch = torch.from_numpy(xtest).to(dtype = torch.float64)
 ytrain_torch = torch.from_numpy(ytrain).to(dtype = torch.float64)
 ytest_torch = torch.from_numpy(ytest).to(dtype = torch.float64)
 ```
+
+Next, I wrote some code that created the SCAD model and fit the data to it over about 100 epochs. In hindsight, I realize that I could have made a `fit()` method within the SCAD class, and this would have been more streamlined. 
+
+```c
+model = LinearSCAD(input_dim=8)
+model.to(dtype = torch.float64)
+
+optimizer = optim.Adam(model.parameters(), lr=0.01)
+
+num_epochs = 100
+
+ytrain_torch_unsqueezed = ytrain_torch.unsqueeze(1)
+ytest_torch_unsqueezed = ytest_torch.unsqueeze(1)
+
+for e in range(num_epochs):
+  optimizer.zero_grad()
+  loss = model.scad_loss(xtrain_torch, ytrain_torch_unsqueezed)
+  loss.backward()
+  optimizer.step()
+
+  if e % 10 == 0:
+    print("Loss at", e, "epoch:", loss.item())
+```
+When running this code, my loss decreased greatly from around 21,000 to 223. 
+
+<img width="318" alt="Screenshot 2024-03-08 at 10 19 30 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/00187954-c54f-477e-b589-830ecd02fa12">
+
