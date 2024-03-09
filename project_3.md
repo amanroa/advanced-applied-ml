@@ -108,7 +108,7 @@ ytrain_torch = torch.from_numpy(ytrain).to(dtype = torch.float64)
 ytest_torch = torch.from_numpy(ytest).to(dtype = torch.float64)
 ```
 
-Next, I wrote some code that created the SCAD model and fit the data to it over about 100 epochs. In hindsight, I realize that I could have made a `fit()` method within the SCAD class, and this would have been more streamlined. 
+Next, I wrote some code that created the SCAD model and fit the data to it over 100 epochs. In hindsight, I realize that I could have made a `fit()` method within the SCAD class, and this would have been more streamlined. 
 
 ```c
 model = LinearSCAD(input_dim=8)
@@ -134,14 +134,14 @@ When running this code, my loss decreased greatly from around 21,000 to 223.
 
 <img width="318" alt="Screenshot 2024-03-08 at 10 19 30 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/00187954-c54f-477e-b589-830ecd02fa12">
 
-But to get a real sense of how accurate this model is, I calculated the $R^2$ value using the sklearn library.
+But to get a real sense of how accurate this model is, I calculated the R^2 value using the sklearn library.
 
 ```c
 y_pred = model(xtest_torch).detach().numpy()
 true_values = ytest_torch_unsqueezed.detach().numpy()
 r2 = R2(true_values, y_pred)
 ```
-The $R^2$ value was quite low, at 0.21975052241838167. This means that this model is not great at predicting the strength of the concrete given all of the possible features. Some of these features may be less helpful to the model. To figure this out, I looked at the coefficients of each of the features, and graphed the absolute value of them on a bar chart. 
+The R^2 value was quite low, at 0.21975052241838167. This means that this model is not great at predicting the strength of the concrete given all of the possible features. Some of these features may be less helpful to the model. To figure this out, I looked at the coefficients of each of the features, and graphed the absolute value of them on a bar chart. 
 
 ```c
 coefficients = model.linear.weight.detach().numpy()
@@ -156,13 +156,51 @@ The coefficients themselves were: [[ 0.07156901  0.01445613 -0.00761952  0.22866
 
 <img width="565" alt="Screenshot 2024-03-08 at 10 40 14 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/03b21c55-a7d8-4c12-aae8-8b622e3cdd4e">
 
-Interestingly, when I modified my model to include only those features, my $R^2$ became negative, with it being -0.9558600377736646 after adding all of the features whos absolute values were greater than 0.02 (all of the features mentioned above). I'm not too sure as to why this happened - maybe my model was overfitted or underfitted. 
+Interestingly, when I modified my model to include only those features, my R^2 became negative, with it being -0.9558600377736646 after adding all of the features whos absolute values were greater than 0.02 (all of the features mentioned above). I'm not too sure as to why this happened - maybe my model was overfitted or underfitted. 
 
 This is how I created my SCAD model. Now, I will compare it to the ElasticNet and SqrtLasso models. 
 
 ## Part 2: ElasticNet, SqrtLasso and SCAD Comparison
 
 The ElasticNet and SqrtLasso classes that I used were the same classes defined in the notebook titled 'Variable_Selection_and_Regularization_Introducation'. For redundancy and to make this notebook easier to read, I will not paste them here.
+
+From that same notebook, I used the `make_correlated_features` method to make the 500 datasets with a correlation of 0.9. 
+
+```c
+def make_correlated_features(num_samples,p,rho):
+  vcor = []
+  for i in range(p):
+    vcor.append(rho**i)
+  r = toeplitz(vcor)
+  mu = np.repeat(0,p)
+  x = np.random.multivariate_normal(mu, r, size=num_samples)
+  return x
+
+rho =0.9
+p = 20
+n = 500
+vcor = []
+for i in range(p):
+  vcor.append(rho**i)
+
+x = make_correlated_features(n,p,rho)
+```
+
+I did not change the amount of features (20) from the notebook that we used in class, as I feel like having more features could reduce the reliance on one or two specific features (as I suspect is happening with the concrete dataset which only has 8 features). So with that made, I created the betastar array and the noise array. After having the x arrays, the betastar array, and the noise array, I performed the calculation of y = x * betastar + noise. 
+
+```c
+beta =np.array([-1,2,3,0,0,0,0,2,-1,4])
+beta = beta.reshape(-1,1)
+betastar = np.concatenate([beta,np.repeat(0,p-len(beta)).reshape(-1,1)],axis=0)
+
+noise_std = 0.5 
+noise = np.random.normal(0, noise_std, size=(500, 1))
+y = np.dot(x, betastar) + noise
+```
+
+
+
+
 
 
 
