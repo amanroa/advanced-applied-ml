@@ -26,7 +26,7 @@ def scad_derivative(beta_hat, lambda_val, a_val):
     return lambda_val * ((beta_hat <= lambda_val) + (a_val * lambda_val - beta_hat)*((a_val * lambda_val - beta_hat) > 0) / ((a_val - 1) * lambda_val) * (beta_hat > lambda_val))
 ```
 
-I made sure to include these methods into my LinearSCAD class. However, I wasn't too sure if I needed to use scad_derivative because ___. 
+I made sure to include these methods into my LinearSCAD class. However, I wasn't too sure if I needed to use `scad_derivative` because I am more familiar with built in optimization methods such as Adam. So, I ended up using that instead of the `scad_derivative` method. 
 
 To get started with this project, we had to import many classes. Here are the import statements: 
 
@@ -55,3 +55,40 @@ I also chose to run my program on cpu, with a data type of float64. This is what
 device = torch.device("cpu")
 dtype = torch.float64
 ```
+
+Here is my LinearSCAD class, which uses SCAD regularization and variable selection for linear models. 
+
+```c
+class LinearSCAD(nn.Module):
+    def __init__(self, input_dim, lambda_val=0.01, a_val=3.7):
+        super(LinearSCAD, self).__init__()
+        self.linear = nn.Linear(input_dim, 1)  
+        self.lambda_val = lambda_val
+        self.a_val = a_val
+    
+    def scad_penalty(self, beta_hat, lambda_val, a_val):
+      abs_beta = torch.abs(beta_hat)
+      is_linear = (abs_beta <= lambda_val)
+      is_quadratic = (lambda_val < abs_beta) & (abs_beta <= a_val * lambda_val)
+      is_constant = (a_val * lambda_val) < abs_beta
+      
+      linear_part = lambda_val * abs_beta * is_linear.float()
+      quadratic_part = (2 * a_val * lambda_val * abs_beta - beta_hat.pow(2) - lambda_val**2) / (2 * (a_val - 1)) * is_quadratic.float()
+      constant_part = (lambda_val**2 * (a_val + 1)) / 2 * is_constant.float()
+      
+      return linear_part + quadratic_part + constant_part
+      
+    def scad_derivative(self, beta_hat, lambda_val, a_val):
+        return lambda_val * ((beta_hat <= lambda_val) + (a_val * lambda_val - beta_hat)*((a_val * lambda_val - beta_hat) > 0) / ((a_val - 1) * lambda_val) * (beta_hat > lambda_val))
+    
+    def forward(self, x):
+        return self.linear(x)
+    
+    def scad_loss(self, x, y):
+        mse_loss = nn.MSELoss()(self.forward(x), y)
+        scad_penalty_value = self.scad_penalty(self.linear.weight, self.lambda_val, self.a_val).sum()
+        return mse_loss + scad_penalty_value
+
+```
+
+To test this class, I used the concrete dataset that we have used previously. This dataset contains eight columns of features, ranging from the age to the amount of cement, and one for the strength of concrete. 
