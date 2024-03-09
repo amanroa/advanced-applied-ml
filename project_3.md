@@ -186,7 +186,7 @@ for i in range(p):
 x = make_correlated_features(n,p,rho)
 ```
 
-I did not change the amount of features (20) from the notebook that we used in class, as I feel like having more features could reduce the reliance on one or two specific features (as I suspect is happening with the concrete dataset which only has 8 features). So with that made, I created the betastar array and the noise array. After having the x arrays, the betastar array, and the noise array, I performed the calculation of y = x * betastar + noise. 
+I did not change the amount of features (20) from the notebook that we used in class, as I feel like having more features could reduce the reliance on one or two specific features (as I suspect is happening with the concrete dataset which only has 8 features). So with that made, I created the betastar array and the noise array. After making the x arrays, the betastar array, and the noise array, I performed the calculation of y = x * betastar + noise. 
 
 ```c
 beta =np.array([-1,2,3,0,0,0,0,2,-1,4])
@@ -198,10 +198,39 @@ noise = np.random.normal(0, noise_std, size=(500, 1))
 y = np.dot(x, betastar) + noise
 ```
 
+Once I had both x and y created, I split them into training and testing sets, the same 80-20 split as before. I also converted them to tensors for pytorch. Finally, I was having some issues with the ytrain and ytest, so I added a few lines to make sure they were the correct shape. 
 
+```c
+xtrain, xtest, ytrain, ytest = tts(x, y, test_size=0.2,shuffle=True,random_state=123)
+xtrain_torch = torch.from_numpy(xtrain).to(dtype = torch.float64)
+xtest_torch = torch.from_numpy(xtest).to(dtype = torch.float64)
+ytrain_torch = torch.from_numpy(ytrain).to(dtype = torch.float64)
+ytest_torch = torch.from_numpy(ytest).to(dtype = torch.float64)
 
+ytrain_torch_unsqueezed = ytrain_torch.unsqueeze(1)
+ytest_torch_unsqueezed = ytrain_torch.unsqueeze(1)
+```
 
+### SqrtLasso
 
+First, I created the SqrtLasso model and fit the xtrain and ytrain data to it. Next, I got the predicted y values. Finally, I printed out the MSE. I got an MSE of 1.9689211475189672. I'll compare it with the other two models' MSEs to see how they match.
+
+```c
+sqrt_model = sqrtLasso(input_size=20)
+sqrt_model.fit(xtrain_torch, ytrain_torch)
+y_pred = sqrt_model.predict(xtest_torch)
+mse_loss = nn.MSELoss()(y_pred, ytest_torch)
+print("Test MSE:", mse_loss.item())
+```
+<img width="251" alt="Screenshot 2024-03-08 at 11 45 27 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/7ee78abe-e92c-4fa9-ba2d-74b0f1569ae3">
+
+But more importantly, we should see if the betastar values match the original values. 
+
+```c
+betastar_torch = torch.from_numpy(betastar).to(dtype = torch.float64)
+sqrt_betastar = sqrt_model.get_coefficients().detach() 
+print("Sqrt Lasso betastar:", sqrt_betastar)
+```
 
 
 
