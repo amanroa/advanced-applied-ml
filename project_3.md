@@ -134,3 +134,25 @@ When running this code, my loss decreased greatly from around 21,000 to 223.
 
 <img width="318" alt="Screenshot 2024-03-08 at 10 19 30 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/00187954-c54f-477e-b589-830ecd02fa12">
 
+But to get a real sense of how accurate this model is, I calculated the $R^2$ value using the sklearn library.
+
+```c
+y_pred = model(xtest_torch).detach().numpy()
+true_values = ytest_torch_unsqueezed.detach().numpy()
+r2 = R2(true_values, y_pred)
+```
+The $R^2$ value was quite low, at 0.21975052241838167. This means that this model is not great at predicting the strength of the concrete given all of the possible features. Some of these features may be less helpful to the model. To figure this out, I looked at the coefficients of each of the features, and graphed the absolute value of them on a bar chart. 
+
+```c
+coefficients = model.linear.weight.detach().numpy()
+features = ["cement", "slag", "ash", "water", "superplastic", "coarseagg", "fineagg", "age"]
+plt.bar(features, abs(coefficients.flatten()))  # Use absolute value to consider magnitude
+plt.xticks(rotation=45)
+plt.ylabel('Importance')
+plt.title('Feature Importance according to SCAD')
+plt.show()
+```
+The coefficients themselves were: [[ 0.07156901  0.01445613 -0.00761952  0.22866092  0.60831127 -0.03531219   0.0012781   0.06330673]], and the graph of importance looked like this. It's important to note that features with coefficients closer to 0 are less important. So the water and superplastic seem to be the most important, with cement, age, and coarseagg potentially being features that we could add to the model if need be. 
+
+<img width="565" alt="Screenshot 2024-03-08 at 10 40 14 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/03b21c55-a7d8-4c12-aae8-8b622e3cdd4e">
+
