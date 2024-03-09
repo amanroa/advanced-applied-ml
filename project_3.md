@@ -91,4 +91,19 @@ class LinearSCAD(nn.Module):
 
 ```
 
-To test this class, I used the concrete dataset that we have used previously. This dataset contains eight columns of features, ranging from the age to the amount of cement, and one for the strength of concrete. 
+To test this class, I used the concrete dataset that we have used previously. This dataset contains eight columns of features, ranging from the age to the amount of cement, and one y column for the strength of concrete. 
+
+I chose to split the x and y data into training and testing sets. I also chose a 80-20 split for training and testing. Additionally, I had to convert the data (which was in a numpy array data type) into torch tensors. 
+
+```c
+x = data.loc[:,'cement':'age'].values
+y = data['strength'].values
+
+xtrain, xtest, ytrain, ytest = tts(x,y,test_size=0.2,shuffle=True,random_state=123)
+
+# Converting to torch tensors
+xtrain_torch = torch.from_numpy(xtrain).to(dtype = torch.float64)
+xtest_torch = torch.from_numpy(xtest).to(dtype = torch.float64)
+ytrain_torch = torch.from_numpy(ytrain).to(dtype = torch.float64)
+ytest_torch = torch.from_numpy(ytest).to(dtype = torch.float64)
+```
