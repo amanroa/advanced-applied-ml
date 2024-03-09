@@ -237,7 +237,38 @@ I decided to create a graph of actual betastar values as compared to the model's
 
 <img width="997" alt="Screenshot 2024-03-09 at 12 48 15 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/ce8be07e-a825-42bb-9493-46714a666353">
 
-This graph shows that SqrtLasso models have the trend of betastar values down well but it isn't exact. For example, the latter indicies don't have any betastar values, and the model predicted values that were close to 0 for those. And in the areas where the betastar values were higher, the model predicted higher values there too. But the values that it predicted for those coefficients that were >0 were not close to the actual values.
+This graph shows that SqrtLasso models have the trend of betastar values down well but it isn't exact. For example, the latter indicies don't have any betastar values, and the model predicted values that were close to 0 for those. And in the areas where the betastar values were higher, the model predicted higher values there too. But the values that it predicted for those coefficients that were less than 0 were not close to the actual values at all.
+
+### ElasticNet
+
+Next, I looked at ElasticNet. I defined a model, fitted it to the training data, predicted values, and calculated the MSE.
+
+```c
+elastic_model = ElasticNet(input_size=20).double()
+elastic_model.fit(xtrain_torch, ytrain_torch)
+y_pred = elastic_model.predict(xtest_torch)
+mse_loss = nn.MSELoss()(y_pred, ytest_torch)
+print("Test MSE:", mse_loss.item())
+```
+<img width="257" alt="Screenshot 2024-03-09 at 12 56 15 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/17819e26-e3ef-404a-9845-d652bcb8a140">
+
+This MSE was slightly less than the SqrtLasso MSE, but not by a lot. Once again, I created the betastar values as seen in the class notebook, and tested them with this model.
+
+```c
+betastar_torch = torch.from_numpy(betastar).to(dtype = torch.float64)
+sqrt_betastar = elastic_model.get_coefficients().detach() 
+print("Sqrt Lasso betastar:", sqrt_betastar)
+```
+<img width="804" alt="Screenshot 2024-03-09 at 12 58 21 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/0c137930-abd2-4366-95ca-60d42aa27b20">
+
+Now let's look at the graph.
+
+<img width="992" alt="Screenshot 2024-03-09 at 12 59 07 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/f3c55eec-77c7-4f13-9f4e-12c7c4ea44f1">
+
+Interestingly, this model was also not able to get any betastar values that were negative. However, it performed slightly better in being more specific with it's predicted values. For example, indices 8 and 9 in the Sqrt Lasso model were very similar, despite their huge difference. But in this model, index 9 is higher than index 8. Also, the indices on the right side of the chart were closer to 0 (their original value) than their counterparts in the SqrtLasso model. 
+
+
+
 
 
 
