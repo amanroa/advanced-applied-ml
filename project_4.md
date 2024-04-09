@@ -123,3 +123,10 @@ test_loader = get_test_loader(data_dir = './data',
 ```
 
 I used the same test and train loader methods that we wrote in class. 
+
+Hyperparameter tuning is important because it can improve model performance. By modifying parameters to be at their optimal levels, we can increase the performance of a model by a lot. I wanted to see just how much hyperparameter tuning could increase my accuracy, so I wanted to create and run an AlexNet model without hyperparameter tuning. 
+
+## AlexNet Model
+
+
+
