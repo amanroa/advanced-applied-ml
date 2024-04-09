@@ -10,6 +10,19 @@ In this project, I have to use particle swarm to tune hyperparameters for CIFAR-
 
 First, I will show you how I loaded the CIFAR-10 data and split it into training and testing sets.
 
+It's important to know that I am using a CPU to run this code, so it takes me longer to run the model. I determined that I was going to be using CPU with this code:
+
+```c
+device = (
+    "cuda"
+    if torch.cuda.is_available()
+    else "mps"
+    if torch.backends.mps.is_available()
+    else "cpu"
+)
+print("Using", device, "device")
+```
+
 ## Loading and Splitting CIFAR-10 Data
 
 ```c
