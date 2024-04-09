@@ -181,4 +181,59 @@ class AlexNetModel(nn.Module):
         return out
 ```
 
+Before running my model, I had to define various features such as the number of classes, epochs, batch size, and learning rate. I also had to create an optimizer. When I was running my model with this batch size of 72, my computer did take a while to compute the 5 epochs that I defined.
 
+```c
+num_classes = 10
+num_epochs = 5
+batch_size = 72
+learning_rate = 0.001
+
+model = AlexNetModel(num_classes).to(device)
+
+# Loss and optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+
+# Training
+total_step = len(train_loader)
+```
+
+And to run the model, I used this code from our class notebook: 
+
+```c
+total_step = len(train_loader)
+
+for epoch in range(num_epochs):
+    for i, (images, labels) in enumerate(train_loader):
+        # Move tensors to the configured device
+        images = images.to(device)
+        labels = labels.to(device)
+
+        # Forward pass
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+
+        # Backward and optimize
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
+                   .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+
+    # Validation
+    with torch.no_grad():
+        correct = 0
+        total = 0
+        for images, labels in valid_loader:
+            images = images.to(device)
+            labels = labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+            del images, labels, outputs
+
+        print('Accuracy of the network on the {} validation images: {} %'.format(5000, 100 * correct / total))
+```
