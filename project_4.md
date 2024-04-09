@@ -237,3 +237,10 @@ for epoch in range(num_epochs):
 
         print('Accuracy of the network on the {} validation images: {} %'.format(5000, 100 * correct / total))
 ```
+*Without* using PSO, these are the accuracy results that I got.
+
+<img width="536" alt="Screenshot 2024-04-09 at 12 08 10 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/3d60df82-9aba-49ad-822e-c6308dde1daa">
+
+This code also took very long to run - over an hour. I hypothesized that once I do PSO to optimize the hyperparameters, it will not only run faster, but have a higher accuracy. 
+
+
