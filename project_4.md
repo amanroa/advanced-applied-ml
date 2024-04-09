@@ -374,3 +374,10 @@ As of the submission time of this homework, my code has been running for 2 hours
 
 Although my program hasn't gotten me the desired results, I am hopeful that my code will work it's magic overnight and find the right combination of hyperparameters to get an accuracy > 84%. 
 
+## Edit:
+
+I let my code run overnight, and after about 6 hours, it timed out. But I was able to get a majority of the outputs. Unfortunately, it seems that the accuracy on the validation set was becoming even less and less accurate.
+
+<img width="551" alt="Screenshot 2024-04-09 at 10 54 54 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/6cb16947-7714-42fe-99a3-cfd6d0b5b557">
+
+
