@@ -450,7 +450,9 @@ best_hyperparams, _ = pso(objective_function, lb, ub, swarmsize=100, maxiter=50)
 print(f"Best Hyperparameters: Learning Rate={best_hyperparams[0]}, Batch Size={best_hyperparams[1]}")
 ```
 
-Unfortunately, I don't know if this will work and give me a higher accuracy, because I have been running this code for over 1 hour and I have not gotten any outputs.
+I ran this code and after 1 hour, I got this output:
+
+<img width="576" alt="Screenshot 2024-04-09 at 4 42 17 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/0e2b43c9-6c13-4c95-98c8-8f20d0401bbb">
 
 ### Second Modification
 
