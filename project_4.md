@@ -380,4 +380,82 @@ I let my code run overnight, and after about 6 hours, it timed out. But I was ab
 
 <img width="551" alt="Screenshot 2024-04-09 at 10 54 54 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/6cb16947-7714-42fe-99a3-cfd6d0b5b557">
 
+These results were obviously unexpected. I'm not sure why I got what I got, so I tried a few modifications to my code to see if maybe it was an error that I made. 
 
+### First Modification 
+
+One modification that I tried was removing my code entirely and using PySwarm's implementation of PSO and PyTorch's implementation of AlexNet. My objective function looked like this:
+
+```c
+def objective_function(hyperparameters):
+    # Unpack hyperparameters
+    learning_rate, batch_size = hyperparameters
+    batch_size = int(batch_size)
+
+    # Load data with the given batch size
+    train_loader, valid_loader = get_train_valid_loader(data_dir = './data',
+                       batch_size = batch_size, augment = True,random_seed = 123)
+
+    test_loader = get_test_loader(data_dir = './data',
+                                  batch_size = batch_size)
+
+    # Initialize model, loss, and optimizer with given learning rate
+    model = torch.hub.load('pytorch/vision:v0.10.0', 'alexnet', pretrained=True) # new model
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    total_step = len(train_loader)
+
+    for epoch in range(num_epochs):
+      for i, (images, labels) in enumerate(train_loader):
+        # Move tensors to the configured device
+        images = images.to(device)
+        labels = labels.to(device)
+
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+      print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
+                .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+
+      with torch.no_grad():
+        correct = 0
+        total = 0
+        for images, labels in valid_loader:
+            images = images.to(device)
+            labels = labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+            del images, labels, outputs
+        validation_score = 100 * correct / total
+        print('Accuracy of the network on the {} validation images: {} %'.format(10000, validation_score))
+
+    return validation_score
+```
+I also thought that maybe I misunderstood what I had to return, and I had to return a positive validation_score, so I made that change as well. And here is how I used PySwarm's PSO. 
+
+```c
+from pyswarm import pso
+
+# lower and upper bounds for each hyperparameter
+lb = [0.0001, 32]  # Lower bounds
+ub = [0.01, 256]   # Upper bounds
+
+best_hyperparams, _ = pso(objective_function, lb, ub, swarmsize=100, maxiter=50)
+
+print(f"Best Hyperparameters: Learning Rate={best_hyperparams[0]}, Batch Size={best_hyperparams[1]}")
+```
+
+Unfortunately, I don't know if this will work and give me a higher accuracy, because I have been running this code for over 1 hour and I have not gotten any outputs.
+
+### Second Modification
+
+I also tried just replacing my AlexNet model with PyTorch's model, and keeping my PSO implementation. The optimization function is the same as above. For this one, I was able to get results from 1 epoch after about 30 minutes - but it was still a very low accuracy. 
+
+<img width="546" alt="Screenshot 2024-04-09 at 4 34 42 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/e1552e51-c29f-4cb0-aa39-908388ba9d80">
+
+If I had more time to work on this in the future, I would hopefully figure out a way to make my code run faster - maybe testing with less CIFAR data, or creating a weaker model, etc. 
