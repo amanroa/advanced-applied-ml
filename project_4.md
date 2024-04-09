@@ -230,7 +230,7 @@ for epoch in range(num_epochs):
             images = images.to(device)
             labels = labels.to(device)
             outputs = model(images)
-            _, predicted = torch.max(outputs.data, 1)
+            x, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
             del images, labels, outputs
@@ -287,7 +287,7 @@ def obj_function(hyperparameters):
             images = images.to(device)
             labels = labels.to(device)
             outputs = model(images)
-            _, predicted = torch.max(outputs.data, 1)
+            x, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
             del images, labels, outputs
@@ -343,7 +343,7 @@ def PSO(num_dimensions, num_particles, max_iter,i_min=-10,i_max=10,bounds=None,w
                 r1, r2 = np.random.uniform(), np.random.uniform()
                 velocity[i] = w * velocity[i] + c1*r1 * (particle['pbest_position'][i] - position[i]) + c2*r2 * (gbest_position[i] - position[i])
                 position[i] += velocity[i]
-                # legalize the values to the provided bounds
+              
                 if bounds is not None:
                     position[i] = np.clip(position[i],bounds[i][0],bounds[i][1])
 
@@ -427,7 +427,7 @@ def objective_function(hyperparameters):
             images = images.to(device)
             labels = labels.to(device)
             outputs = model(images)
-            _, predicted = torch.max(outputs.data, 1)
+            x, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
             del images, labels, outputs
