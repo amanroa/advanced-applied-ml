@@ -366,9 +366,9 @@ print("Best Position:", best_position)
 print("Best Value:", best_value)
 ```
 
-As of the submission time of this homework, my code has been running for 2 hours. However, I believe that my implementation is not fully correct, because I have been getting extremely low accuracies so far. I have attached a screenshot of my results (the first 4 epochs of the first iteration), to show what I have so far. I will try to leave this running overnight and update it before class, however, I believe that Google Colab might time out. 
+As of the submission time of this homework, my code has been running for 2 hours. However, I believe that my implementation is not fully correct, because I have been getting extremely low accuracies so far. I have attached a screenshot of my results (the first iteration), to show what I have so far. I will try to leave this running overnight and update it before class, however, I believe that Google Colab might time out. 
 
-<img width="546" alt="Screenshot 2024-04-09 at 3 02 18 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/49df29d0-0412-49bf-bf82-6badc0e7b5ac">
+<img width="541" alt="Screenshot 2024-04-09 at 3 04 26 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/b8f47cc6-e7cd-4486-8407-e2dd5d96ca6e">
 
 ## Conclusion
 
