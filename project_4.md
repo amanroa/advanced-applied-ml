@@ -365,3 +365,12 @@ best_position, best_value = PSO(num_dimensions, num_particles, max_iter,bounds=b
 print("Best Position:", best_position)
 print("Best Value:", best_value)
 ```
+
+As of the submission time of this homework, my code has been running for 2 hours. However, I believe that my implementation is not fully correct, because I have been getting extremely low accuracies so far. I have attached a screenshot of my results (the first 4 epochs of the first iteration), to show what I have so far. I will try to leave this running overnight and update it before class, however, I believe that Google Colab might time out. 
+
+<img width="546" alt="Screenshot 2024-04-09 at 3 02 18 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/49df29d0-0412-49bf-bf82-6badc0e7b5ac">
+
+## Conclusion
+
+Although my program hasn't gotten me the desired results, I am hopeful that my code will work it's magic overnight and find the right combination of hyperparameters to get an accuracy > 84%. 
+
