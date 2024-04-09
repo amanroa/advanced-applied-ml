@@ -243,4 +243,125 @@ for epoch in range(num_epochs):
 
 This code also took very long to run - over an hour. I hypothesized that once I do PSO to optimize the hyperparameters, it will not only run faster, but have a higher accuracy. 
 
+## Particle Swarm Optimization
 
+To start off my PSO method, I had to create an optimization function. I thought that the optimization function should return the negative validation score while training the model, so I added that in as the thing to return. I also wanted to test the effects of different batch sizes, so I left that undefined. I chose to test the learning rate as well. 
+
+```c
+def obj_function(hyperparameters):
+    learning_rate, batch_size = hyperparameters
+    batch_size = int(round(hyperparameters[1]))
+    batch_size = max(72, min(batch_size, 256)) 
+
+    model = AlexNetModel(num_classes).to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+
+    train_loader, valid_loader = get_train_valid_loader(data_dir = './data',
+                       batch_size = batch_size, augment = True,random_seed = 123)
+
+    test_loader = get_test_loader(data_dir = './data',
+                                  batch_size = batch_size)
+
+    for epoch in range(num_epochs):
+      for i, (images, labels) in enumerate(train_loader):
+        # Move tensors to the configured device
+        images = images.to(device)
+        labels = labels.to(device)
+
+        # Forward pass
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+
+        # Backward and optimize
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+      print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
+                .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+        
+      with torch.no_grad():
+        correct = 0
+        total = 0
+        for images, labels in valid_loader:
+            images = images.to(device)
+            labels = labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+            del images, labels, outputs
+        validation_score = 100 * correct / total
+        print('Accuracy of the network on the {} validation images: {} %'.format(10000, validation_score))
+
+    return -validation_score
+```
+
+This seems to be a good optimization function, based on what I have read about PSO. 
+
+To go along with the optimization function, I wrote a PSO function, based off of what we did in class. 
+
+```c
+def PSO(num_dimensions, num_particles, max_iter,i_min=-10,i_max=10,bounds=None,w=0.5,c1=0.25,c2=0.75):
+    if bounds is None:
+        particles = [({'position': [np.random.uniform(i_min, i_max) for _ in range(num_dimensions)],
+                    'velocity': [np.random.uniform(-1, 1) for _ in range(num_dimensions)],
+                    'pbest': float('inf'),
+                    'pbest_position': None})
+                    for _ in range(num_particles)]
+    else:
+        particles = [({'position': [np.random.uniform(bounds[i][0], bounds[i][1]) for i in range(num_dimensions)],
+                    'velocity': [np.random.uniform(-1, 1) for _ in range(num_dimensions)],
+                    'pbest': float('inf'),
+                    'pbest_position': None})
+                    for _ in range(num_particles)]
+
+    # Initialize global best
+    gbest_value = float('inf')
+    gbest_position = None
+
+    for _ in range(max_iter):
+        for particle in particles:
+            position = particle['position']
+            velocity = particle['velocity']
+
+            # Calculate the current value
+            current_value = obj_function(position)
+
+            # Update personal best
+            if current_value < particle['pbest']:
+                particle['pbest'] = current_value
+                particle['pbest_position'] = position.copy()
+
+            # Update global best
+            if current_value < gbest_value:
+                gbest_value = current_value
+                gbest_position = position.copy()
+
+            # Update particle's velocity and position
+            for i in range(num_dimensions):
+                r1, r2 = np.random.uniform(), np.random.uniform()
+                velocity[i] = w * velocity[i] + c1*r1 * (particle['pbest_position'][i] - position[i]) + c2*r2 * (gbest_position[i] - position[i])
+                position[i] += velocity[i]
+                # legalize the values to the provided bounds
+                if bounds is not None:
+                    position[i] = np.clip(position[i],bounds[i][0],bounds[i][1])
+
+    return gbest_position, gbest_value
+
+```
+
+And I defined the bounds of the learning rate and batch size. I chose batch size as my second hyperparameter because I hypothesized that larger batch sizes would make the model train faster. I am not too sure on what max_iter does, however, I made it a low number in order to reduce the amount of time spent running my code.
+
+```c
+# Parameters
+num_dimensions = 2
+num_particles = 3
+max_iter = 2
+bounds = [(0.0001, 0.1), (72, 256)]
+
+# Run PSO
+best_position, best_value = PSO(num_dimensions, num_particles, max_iter,bounds=bounds)
+print("Best Position:", best_position)
+print("Best Value:", best_value)
+```
