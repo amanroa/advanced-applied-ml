@@ -68,3 +68,44 @@ best_k = k_values[np.argmax(k_scores)]
 print("Best k:", best_k, "with Cross-Validated Accuracy:", max(k_scores))
 ```
 
+Here is how I ran my KNN method without the k value. 
+
+```c
+xtrain, xtest, ytrain, ytest = tts(X,y,test_size=0.3,shuffle=True,random_state=123)
+d = KNN(xtrain, xtest)
+output = d.calc_dist()
+y_pred = d.predict(ytrain)
+np.mean(y_pred == ytest)
+```
+
+This gives me an output of:
+<img width="168" alt="Screenshot 2024-04-22 at 12 55 46 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/ff010757-183e-478f-a87a-9c8fab5eb2f3">
+
+This is a very high accuracy. It might have to do with my model overfitting, or if I didn't implement KNN correctly. However, I decided to keep going and try to implement SMOTE, ADASYN and FastKDE. 
+
+## SMOTE
+
+This is the code where I implemented SMOTE, and a graph of the changed values. We can see that there are an equal amount of 1's as compared to 0's.
+
+```c
+oversample = SMOTE()
+Xs, ys = oversample.fit_resample(X, y)
+counter = Counter(ys)
+print(counter)
+for label, _ in counter.items():
+	row_ix = np.where(ys == label)[0]
+	plt.scatter(Xs[row_ix, 0], Xs[row_ix, 1], label=str(label),alpha=0.4)
+plt.legend()
+plt.show()
+```
+<img width="578" alt="Screenshot 2024-04-22 at 12 57 54 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/82fe7994-d18f-4262-9b19-f0c657b9666e">
+
+
+
+
+
+
+
+
+
+
