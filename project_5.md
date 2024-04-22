@@ -198,12 +198,26 @@ pdf = kde.pdf
 axes = kde.axes
 ```
 
-The goal of this is to balance out the dataset by adding more points to the minority. So, I made a points array to generate 200 points in between the min and max of each axis in axes. I also created a grid variable, which 
+The goal of this is to balance out the dataset by adding more points to the minority. So, I made a points array to generate 200 points in between the min and max of each axis in axes. I also created a grid variable, which creates a multi-dimensional grid of points that I can get the coordinates from. I flattened and normalized the pdf so that it would be easier to choose random points.
 
 ```c
 points = [np.linspace(ax.min(), ax.max(), 200) for ax in axes]
 grid = np.meshgrid(*[np.linspace(ax.min(), ax.max(), ax.size) for ax in axes], indexing='ij')
+coords = np.vstack([g.ravel() for g in grid]).T
+pdf_flat = pdf.ravel()
+pdf_flat /= pdf_flat.sum() 
 ```
+To generate new points, I used the flattened pdf to select random indices. However, I wasn't too sure where to go from here in terms of categorizing these points into 1's and 0's.
+
+```c
+num_samples = 1000
+indices = np.random.choice(len(pdf_flat), size=num_samples, p=pdf_flat)
+new_samples = coords[indices]
+```
+I created a graph of the new points, but I wasn't sure how to combine the points and create an `Xs` and `ys` as we did earlier and perform the KNN with it. 
+
+<img width="919" alt="Screenshot 2024-04-22 at 4 32 13 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/7e1d313f-24c2-4da7-8813-8dc5d3b5ff54">
+
 
 ## Question 2 - Final Project Information
 
