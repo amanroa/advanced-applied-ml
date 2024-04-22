@@ -198,6 +198,13 @@ pdf = kde.pdf
 axes = kde.axes
 ```
 
+The goal of this is to balance out the dataset by adding more points to the minority. So, I made a points array to generate 200 points in between the min and max of each axis in axes. I also created a grid variable, which 
+
+```c
+points = [np.linspace(ax.min(), ax.max(), 200) for ax in axes]
+grid = np.meshgrid(*[np.linspace(ax.min(), ax.max(), ax.size) for ax in axes], indexing='ij')
+```
+
 ## Question 2 - Final Project Information
 
 My final project will be titled: 'Identifying Bird Species Based on Their Song'. I will use [this dataset](https://www.kaggle.com/datasets/vinayshanbhag/bird-song-data-set). I chose this dataset because it only contains five bird species, which is a manageable amount. If possible, I will also try to use [this larger dataset](https://www.kaggle.com/competitions/birdclef-2024/data?select=train_metadata.csv), but that may be a bit aspirational as there are about 200 bird species in this dataset, and I am limited in terms of how much data my computer can run. 
