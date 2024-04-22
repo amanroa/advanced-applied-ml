@@ -180,8 +180,15 @@ Interestingly, ADASYN gave us very similar results to SMOTE. The first method lo
 ## FastKDE
 
 
+## Question 2 - Final Project Information
 
+My final project will be titled: 'Identifying Bird Species Based on Their Song'. I will use this dataset: [https://www.kaggle.com/datasets/vinayshanbhag/bird-song-data-set]. I chose this dataset because it only contains five bird species, which is a manageable amount. If possible, I will also try to use this dataset: [https://www.kaggle.com/competitions/birdclef-2024/data?select=train_metadata.csv], but that may be a bit aspirational as there are about 200 bird species in this dataset. 
 
+In this project, I will aim to utilize sound recordings to identify which calls belong to which bird species. My main goal is to be able to correctly identify the bird species from their calls with an accuracy that is > 50%. I hope that this will be acheivable using Time Series models or other similar models. To map the audio into a format that the computer can understand it, I am also considering using spectograms. These are essentially maps that track noise, and show darker patterns where a noise is heard. I hope to create a model that can recognize these visual patterns and match them to a bird species! 
+
+Example of a spectogram:
+
+![image](https://github.com/amanroa/advanced-applied-ml/assets/26678552/be811836-09ba-46da-88e9-540bfdce9ded)
 
 
 
