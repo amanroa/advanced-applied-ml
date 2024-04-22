@@ -179,7 +179,24 @@ Interestingly, ADASYN gave us very similar results to SMOTE. The first method lo
 
 ## FastKDE
 
-Implementing FastKDE was a little bit difficult for me. 
+Implementing FastKDE was a little bit difficult for me. When I was trying to create the pdf, I would get this error. I realized that it was due to the X shape being (10000, 2) and the y shape being (10000,). 
+<img width="1178" alt="Screenshot 2024-04-22 at 2 37 40 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/89a32ccd-6558-40f2-8c39-1b976365dff0">
+
+I am unfamiliar with the `fastKDE` library, as we only used `fastkde` in our in-class notebooks. To try and understand the `fastKDE` class, I read [it's documentation](https://github.com/LBL-EESA/fastkde/blob/main/src/fastkde/fastKDE.py). 
+
+First, I realized that we need to use FastKDE to generate more of the minority data, so I isolated it. I also found that the `fastKDE` method doesn't work without transposing the dataset.
+
+```c
+X_minority = X[y == 1]
+kde = fastKDE.fastKDE(X_minority.T)
+```
+
+Next, I got the pdf and axes.
+
+```c
+pdf = kde.pdf
+axes = kde.axes
+```
 
 ## Question 2 - Final Project Information
 
