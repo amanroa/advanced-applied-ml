@@ -79,6 +79,7 @@ np.mean(y_pred == ytest)
 ```
 
 This gives me an output of:
+
 <img width="168" alt="Screenshot 2024-04-22 at 12 55 46 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/ff010757-183e-478f-a87a-9c8fab5eb2f3">
 
 This is a very high accuracy. It might have to do with my model overfitting, or if I didn't implement KNN correctly. However, I decided to keep going and try to implement SMOTE, ADASYN and FastKDE. 
@@ -99,6 +100,90 @@ plt.legend()
 plt.show()
 ```
 <img width="578" alt="Screenshot 2024-04-22 at 12 57 54 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/82fe7994-d18f-4262-9b19-f0c657b9666e">
+
+I tried 2 ways to implement SMOTE. The first method involved resampling the entire x and y data, as shown above. And the second method involved just resampling the x_train and y_train data. I chose these two ways because I wasn't sure which one was the best option. 
+
+First method: 
+
+```c
+oversample = SMOTE()
+Xs, ys = oversample.fit_resample(X, y)
+xtrain, xtest, ytrain, ytest = tts(Xs,ys,test_size=0.3,shuffle=True,random_state=123)
+d = KNN(xtrain, xtest)
+output = d.calc_dist()
+y_pred = d.predict(ytrain)
+np.mean(y_pred == ytest)
+```
+<img width="170" alt="Screenshot 2024-04-22 at 1 03 32 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/5914102c-e940-4c78-8062-1bd3170ee9e4">
+
+Second method:
+
+```c
+xtrain, xtest, ytrain, ytest = tts(X,y,test_size=0.3,shuffle=True,random_state=123)
+oversample = SMOTE()
+X_res, y_res = oversample.fit_resample(xtrain, ytrain)
+d = KNN(X_res, xtest)
+output = d.calc_dist()
+y_pred = d.predict(y_res)
+np.mean(y_pred == ytest)
+```
+<img width="173" alt="Screenshot 2024-04-22 at 1 04 48 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/4a2e4dfc-10ed-43ea-9dae-5d0884abba1a">
+
+Clearly, the first method came up with a higher accuracy. However, that accuracy is still less than the original accuracy produced by the KNN method. 
+
+## ADASYN
+
+I followed the same procedure for ADASYN. First, I made a plot to show the distribution, and how the amount of 1's was almost equal to the amount of 0's.
+
+```c
+ada = ADASYN(random_state=42)
+Xs, ys = ada.fit_resample(X, y)
+counter = Counter(ys)
+print(counter)
+for label, _ in counter.items():
+	row_ix = np.where(ys == label)[0]
+	plt.scatter(Xs[row_ix, 0], Xs[row_ix, 1], label=str(label),alpha=0.4)
+plt.legend()
+plt.show()
+```
+<img width="566" alt="Screenshot 2024-04-22 at 1 07 11 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/ea4977ae-da25-4ef2-a98c-c793558c2e55">
+
+I then repeated the two methods I did with SMOTE. 
+
+First method:
+
+```c
+oversample = ADASYN(random_state=42)
+Xs, ys = oversample.fit_resample(X, y)
+xtrain, xtest, ytrain, ytest = tts(Xs,ys,test_size=0.3,shuffle=True,random_state=123)
+d = KNN(xtrain, xtest)
+output = d.calc_dist()
+y_pred = d.predict(ytrain)
+np.mean(y_pred == ytest)
+```
+<img width="164" alt="Screenshot 2024-04-22 at 1 09 22 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/b88b530d-a7fc-4b5b-8bb7-047ce377b795">
+
+Second method:
+```c
+xtrain, xtest, ytrain, ytest = tts(X,y,test_size=0.3,shuffle=True,random_state=123)
+oversample = ADASYN(random_state=42)
+X_res, y_res = oversample.fit_resample(xtrain, ytrain)
+d = KNN(X_res, xtest)
+output = d.calc_dist()
+y_pred = d.predict(y_res)
+np.mean(y_pred == ytest)
+```
+<img width="159" alt="Screenshot 2024-04-22 at 1 10 40 AM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/cde8bdfe-5e93-4c0e-bf89-534f7712f3b8">
+
+Interestingly, ADASYN gave us very similar results to SMOTE. The first method looks to have an identical accuracy, but that could be due to my misimplementation of the KNN class.
+
+## FastKDE
+
+
+
+
+
+
 
 
 
