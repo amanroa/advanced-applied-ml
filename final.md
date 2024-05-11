@@ -54,7 +54,7 @@ maintain the simplicity of the dataset.
 
 <figure id="fig:enter-label">
 <img width="649" src= "https://github.com/amanroa/advanced-applied-ml/assets/26678552/abbf846e-451a-440a-a2f2-fca6ca70dcb8">
-<figcaption>A spectrogram of the words "nineteenth century" being spoken [7]
+<figcaption>Figure 1. A spectrogram of the words "nineteenth century" being spoken [7]
 <span class="citation" data-cites="spectrogram"></span>.</figcaption>
 </figure>
 
@@ -86,8 +86,8 @@ component of my model took much longer than I predicted. Figure 2 shows
 an example of a spectrogram that I used for each species.
 
 <figure id="fig:enter-label">
-<img src="gray_spec.png" />
-<figcaption>Examples of spectrograms used for each species.</figcaption>
+<img width="714" alt="Screenshot 2024-05-10 at 10 22 30 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/464893ef-d68d-425e-85aa-09a2bcabf840">
+<figcaption>Figure 2. Examples of spectrograms used for each species.</figcaption>
 </figure>
 
 Additionally, I used ImageDataGenerators to modify the images in the
@@ -111,8 +111,8 @@ shown in the picture, it is much too small for my model to distinguish
 any patterns.
 
 <figure id="fig:enter-label">
-<img src="bad_res.png" />
-<figcaption>A low resolution spectrogram that I would have used for the
+<img width="227" alt="Screenshot 2024-05-10 at 10 23 09 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/bbb0b5f3-58e6-4b46-b883-57b188ce38f4">
+<figcaption>Figure 3. A low resolution spectrogram that I would have used for the
 LeNet-5 model.</figcaption>
 </figure>
 
@@ -137,14 +137,14 @@ input - around 224 x 224. I felt that there wasn’t as much data loss
 with this image size, so I decided to use this model in my project.
 
 <figure id="fig:enter-label">
-<img src="residual.png" />
-<figcaption>A diagram of one residual block in the ResNet-50
+<img width="312" alt="Screenshot 2024-05-10 at 10 24 16 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/2bdd060c-287f-4ef2-9394-3b96f83abca5">
+<figcaption>Figure 4. A diagram of one residual block in the ResNet-50
 architecture [6].</figcaption>
 </figure>
 
 <figure id="fig:enter-label">
-<img src="resnet.png" />
-<figcaption>Right: ResNet-34 architecture, Middle: Plain network with 34
+<img width="249" alt="Screenshot 2024-05-10 at 10 24 53 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/3f605c0e-fb4c-4cc9-b2aa-95b675f878c9">
+<figcaption>Figure 5. Right: ResNet-34 architecture, Middle: Plain network with 34
 layers, Left: Architecture for a VGG-19 model, which has 19
 layers [6].</figcaption>
 </figure>
@@ -170,8 +170,8 @@ After creating my model, I trained it for 10 epochs. After training for
 on the training set. Unfortunately, that might indicate overfitting.
 
 <figure id="fig:enter-label">
-<img src="model.png" />
-<figcaption>A high level image of my model</figcaption>
+<img width="271" alt="Screenshot 2024-05-10 at 10 25 29 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/11a480c9-cfa9-48d5-8c42-af471f55abde">
+<figcaption>Figure 6. A high level image of my model</figcaption>
 </figure>
 
 # Discussion and Inferences
@@ -193,8 +193,8 @@ issue I could think of is that I chose a far too complex model for this
 smaller dataset.
 
 <figure id="fig:enter-label">
-<img src="confusion.png" />
-<figcaption>Confusion matrix for my model.</figcaption>
+<img width="547" alt="Screenshot 2024-05-10 at 10 25 53 PM" src="https://github.com/amanroa/advanced-applied-ml/assets/26678552/6319171f-7bb7-4d2d-9a1c-a22432ca3696">
+<figcaption>Figure 7. Confusion matrix for my model.</figcaption>
 </figure>
 
 # Conclusion
