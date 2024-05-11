@@ -213,8 +213,7 @@ of Neurophysiology, 96(3), 1441-1455.
 https://doi.org/10.1152/jn.01138.2005
 
 [2] Zhang, F., Chen, H., & Xie, J. (2021). Bird species identification using
-spectrogram based on multi-channel fusion of dcnns. Entropy, 23(11),
-1507. https://doi.org/10.3390/e23111507
+spectrogram based on multi-channel fusion of dcnns. Entropy, 23(11), 1507.https://doi.org/10.3390/e23111507
 
 [3] Arriaga, J. G., Kossan, G., Cody, M. L., Vallejo, E. E., & Taylor, C.
 (2013). Acoustic sensor arrays for understanding bird communication.
