@@ -53,7 +53,7 @@ bird can make - alarm calls, trilling, contact calls, etc. This is to
 maintain the simplicity of the dataset.
 
 <figure id="fig:enter-label">
-<img src="color_spec.png" />
+<img width="649" src= "https://github.com/amanroa/advanced-applied-ml/assets/26678552/abbf846e-451a-440a-a2f2-fca6ca70dcb8">
 <figcaption>A spectrogram of the words "nineteenth century" being spoken [7]
 <span class="citation" data-cites="spectrogram"></span>.</figcaption>
 </figure>
