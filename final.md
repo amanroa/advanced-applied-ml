@@ -13,19 +13,19 @@ Identifying birds based on bird song has been heavily researched. It is
 not as simple as one might think - it has been shown that bird song
 varies, even with individual birds. For example, male birds show more
 creativity with their songs when they are singing alone, as opposed to
-singing to a female bird . This variability in song makes it difficult
+singing to a female bird [1]. This variability in song makes it difficult
 to create a highly accurate ML model. In addition to variability in the
 songs, background noise and overlapping bird song all make it difficult
 to identify birds.
 
 Researchers have tried multiple models to overcome these obstacles: deep
-convolutional neural networks , support vector machines, and hidden
-Markov models have all been attempted in the quest to create a perfect
+convolutional neural networks [2], support vector machines, and hidden
+Markov models [3] have all been attempted in the quest to create a perfect
 bird identification model.
 
 Based on my research, a deep convolutional neural network (DCNN) with
 residual blocks is the most accurate method available for identifying
-birds . I decided to use this information to create my own model. The
+birds [2]. I decided to use this information to create my own model. The
 goal was to create a model that achieved an accuracy greater than 50% on
 the data.
 
@@ -33,13 +33,13 @@ the data.
 
 When searching for datasets for this topic, I came across two viable
 options on Kaggle. The first is titled *BirdCLEF 2024*, which contains
-100 audio clips for about 200 species of birds . This comprehensive
+100 audio clips for about 200 species of birds [4]. This comprehensive
 dataset, however, was a bit too large - about 23 GB. I felt that my
 computer would not be able to process all of this data, so I searched
 for a smaller dataset.
 
 The dataset that I chose is called *Bird Song Dataset*, and it was
-uploaded to Kaggle by a user named vinayshanbhag . This dataset contains
+uploaded to Kaggle by a user named vinayshanbhag [5]. This dataset contains
 5,422 audio files for five different species of birds: the American
 Robin, Bewick’s Wren, the Northern Cardinal, the Northern Mockingbird,
 and the Song Sparrow. This means that there are about 1,100 audio files
@@ -54,7 +54,7 @@ maintain the simplicity of the dataset.
 
 <figure id="fig:enter-label">
 <img src="color_spec.png" />
-<figcaption>A spectrogram of the words "nineteenth century" being spoken
+<figcaption>A spectrogram of the words "nineteenth century" being spoken [7]
 <span class="citation" data-cites="spectrogram"></span>.</figcaption>
 </figure>
 
@@ -67,7 +67,7 @@ such as a time series or a CNN. With a time series model, I would use
 the audio clips in their current format to train the model. But with a
 CNN model, I could convert the audio clips into spectrograms.
 Spectrograms, as shown in Figure 1, are a 2-D representation of audio
-frequencies as they vary with time . After converting the audio to
+frequencies as they vary with time [7]. After converting the audio to
 images, I could train a CNN on the converted images. I thought that the
 latter method was interesting, so I chose to use a CNN model.
 
@@ -103,7 +103,7 @@ options.
 My first thought with the model type was that the grayscale images
 reminded me of the MNIST data. So, I looked into the LeNet-5
 architecture, which is a model that is commonly used for the MNIST data.
-However, the LeNet-5 model takes in images of a low resolution . Due to
+However, the LeNet-5 model takes in images of a low resolution [8]. Due to
 the large resolution of my spectrograms, I couldn’t resize them to be
 that small, or they would lose all of their identifying data. Figure 3
 is an example of a spectrogram after being resized to 32 x 32 pixels. As
@@ -130,7 +130,7 @@ complex datasets is with it’s unique feature of residual blocks.
 Residual blocks, as shown in Figure 4, occur after every 2 convolutions,
 and we bypass the layer in between. This is used to reduce the vanishing
 gradient problem. The larger architecture of ResNet-50 ends up looking
-something like Figure 5, which is a diagram of ResNet-34 . We can see
+something like Figure 5, which is a diagram of ResNet-34 [6]. We can see
 the multiple residual blocks that are implemented throughout the model.
 Another benefit of ResNet-50 is that it takes higher quality images as
 input - around 224 x 224. I felt that there wasn’t as much data loss
@@ -139,14 +139,14 @@ with this image size, so I decided to use this model in my project.
 <figure id="fig:enter-label">
 <img src="residual.png" />
 <figcaption>A diagram of one residual block in the ResNet-50
-architecture.</figcaption>
+architecture [6].</figcaption>
 </figure>
 
 <figure id="fig:enter-label">
 <img src="resnet.png" />
 <figcaption>Right: ResNet-34 architecture, Middle: Plain network with 34
 layers, Left: Architecture for a VGG-19 model, which has 19
-layers.</figcaption>
+layers [6].</figcaption>
 </figure>
 
 ## Application of Methods and Validation Procedure
@@ -157,7 +157,7 @@ addition - I added an arugment in the base model’s initialization titled
 *"weights = ’imagenet’"*. This initialized the ResNet model with some
 base weights from the ImageNet database, which I thought would be
 helpful. This way, the model could spend more time on the fine details
-rather than trying to understand the basic shapes of the spectrograms .
+rather than trying to understand the basic shapes of the spectrograms [6].
 
 Next, I added a GlobalAveragePooling2D layer. This simplified the output
 by creating a single average number per feature discovered. Finally, I
@@ -205,40 +205,35 @@ perfect. In the future, I might try using a Time Series model, rather
 than a CNN. Or, I could try using my ResNet-50 model with the much
 larger BirdCLEF data, to see if it reduces the overfitting.
 
-# Acknowledgment
+# References
 
-I would like to thank Professor Vasiliu for aiding me with my model and
-giving me ideas for improvements to this project.
-
-1
-
-Kao, M. and Brainard, M. (2006). Lesions of an avian basal ganglia
+[1] Kao, M. and Brainard, M. (2006). Lesions of an avian basal ganglia
 circuit prevent context-dependent changes to song variability. Journal
 of Neurophysiology, 96(3), 1441-1455.
 https://doi.org/10.1152/jn.01138.2005
 
-Zhang, F., Chen, H., & Xie, J. (2021). Bird species identification using
+[2] Zhang, F., Chen, H., & Xie, J. (2021). Bird species identification using
 spectrogram based on multi-channel fusion of dcnns. Entropy, 23(11),
 1507. https://doi.org/10.3390/e23111507
 
-Arriaga, J. G., Kossan, G., Cody, M. L., Vallejo, E. E., & Taylor, C.
+[3] Arriaga, J. G., Kossan, G., Cody, M. L., Vallejo, E. E., & Taylor, C.
 (2013). Acoustic sensor arrays for understanding bird communication.
 identifying cassin’s vireos using svms and hmms. Advances in Artificial
 Life, ECAL 2013. https://doi.org/10.7551/978-0-262-31709-2-ch120
 
-BirdCLEF 2024 \| Kaggle. (n.d.).
+[4] BirdCLEF 2024 \| Kaggle. (n.d.).
 https://www.kaggle.com/competitions/birdclef-2024
 
-bird song data set. (2020, June 22). Kaggle.
+[5] bird song data set. (2020, June 22). Kaggle.
 https://www.kaggle.com/datasets/vinayshanbhag/bird-song-data-set
 
-Huilgol, P. (2023, August 9). Top 4 Pre-Trained Models for Image
+[6] Huilgol, P. (2023, August 9). Top 4 Pre-Trained Models for Image
 Classification with Python Code. Analytics Vidhya.
 https://www.analyticsvidhya.com/blog/2020/08/top-4-pre-trained-models-for-image-classification-with-python-code/
 
-Wikipedia contributors. (2024, May 10). Spectrogram. Wikipedia.
+[7] Wikipedia contributors. (2024, May 10). Spectrogram. Wikipedia.
 https://en.wikipedia.org/wiki/Spectrogram
 
-Bangar, S. (2022, June 22). LeNEt 5 Architecture Explained - Siddhesh
+[8] Bangar, S. (2022, June 22). LeNEt 5 Architecture Explained - Siddhesh
 Bangar - Medium. Medium.
 https://medium.com/@siddheshb008/lenet-5-architecture-explained-3b559cb2d52b
